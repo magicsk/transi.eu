@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Transi.eu
 
-## Getting Started
+Landing page for [Transi](https://github.com/magicsk/Transi)/[Transi-Swift](https://github.com/magicsk/Transi-swift) — a native public transport app for Bratislava Region, available on iOS and Android.
 
-First, run the development server:
+Built with Next.js App Router and deployed as a static-ish site with hourly ISR revalidation for live release data fetched from GitHub.
+
+## Features
+
+- Platform-aware UI — detects iOS/Android via user-agent and reorders content accordingly
+- Live release badges — latest version numbers fetched from GitHub Releases API (revalidated hourly)
+- Data-driven screenshots — pulled from `screenshots.json` in each app repo, no website changes needed when screenshots update
+- Dark/light mode — follows system preference via `prefers-color-scheme`, with matching favicon and logo
+- Animated feature cards — 3D tilt + zoom on hover using framer-motion spring physics
+- Screenshot carousel — animated transitions, platform/theme switching, thumbnail navigation
+
+## Tech stack
+
+|                 |                                                    |
+| --------------- | -------------------------------------------------- |
+| Framework       | [Next.js 16](https://nextjs.org) (App Router)      |
+| Language        | TypeScript 5                                       |
+| Styling         | [Tailwind CSS v4](https://tailwindcss.com)         |
+| Animation       | [Framer Motion 12](https://www.framer.com/motion/) |
+| Icons           | [Lucide React](https://lucide.dev)                 |
+| Package manager | [pnpm](https://pnpm.io)                            |
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+pnpm build
+pnpm start
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/
+│   ├── layout.tsx          # Root layout, metadata, favicon
+│   └── page.tsx            # Server component — fetches releases + screenshots
+├── components/
+│   ├── Navbar.tsx
+│   ├── Hero.tsx
+│   ├── Features.tsx
+│   ├── Screenshots.tsx
+│   ├── Download.tsx
+│   ├── Stats.tsx
+│   ├── Footer.tsx
+│   └── ThemeLogo.tsx
+└── lib/
+    ├── github.ts           # fetchLatestRelease, fetchScreenshots
+    ├── useDevicePlatform.ts
+    └── useColorScheme.ts
+```

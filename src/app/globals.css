@@ -1,26 +1,305 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
+/* ─────────────────────────────────────────────
+   Semantic design tokens - light mode (default)
+───────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #f3f6fa;
+  --bg-surface: #ffffff;
+  --phone-frame: #e2e5ee;
+
+  --text: #0d1117;
+  --text-secondary: rgba(13, 17, 23, 0.65);
+  --text-muted: rgba(13, 17, 23, 0.45);
+  --text-faint: rgba(13, 17, 23, 0.28);
+  --text-faintest: rgba(13, 17, 23, 0.15);
+
+  --border: rgba(0, 0, 0, 0.07);
+  --border-strong: rgba(0, 0, 0, 0.12);
+
+  --card-subtle: rgba(0, 0, 0, 0.025);
+  --card-bg: rgba(0, 0, 0, 0.04);
+  --card-hover: rgba(241, 57, 83, 0.06);
+
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(0, 0, 0, 0.07);
+  --glass-hover-bg: rgba(241, 57, 83, 0.05);
+
+  --scrollbar-bg: #f3f6fa;
+
+  --gradient-bg-1: #f7f4f5;
+  --gradient-bg-2: #fdf4f5;
+  --gradient-bg-3: #f7f5f7;
+
+  --indicator: rgba(0, 0, 0, 0.15);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* ───────────────────────────────────────────
+   Dark mode overrides
+─────────────────────────────────────────── */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg: #09090f;
+    --bg-surface: #111118;
+    --phone-frame: #111118;
+
+    --text: #f0f0f5;
+    --text-secondary: rgba(240, 240, 245, 0.7);
+    --text-muted: rgba(240, 240, 245, 0.5);
+    --text-faint: rgba(240, 240, 245, 0.28);
+    --text-faintest: rgba(240, 240, 245, 0.15);
+
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.15);
+
+    --card-subtle: rgba(255, 255, 255, 0.025);
+    --card-bg: rgba(255, 255, 255, 0.04);
+    --card-hover: rgba(241, 57, 83, 0.08);
+
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-hover-bg: rgba(241, 57, 83, 0.06);
+
+    --scrollbar-bg: #09090f;
+
+    --gradient-bg-1: #09090f;
+    --gradient-bg-2: #150b0b;
+    --gradient-bg-3: #0d090f;
+
+    --indicator: rgba(255, 255, 255, 0.2);
   }
 }
 
+/* ───────────────────────────────────────────
+   Tailwind theme extensions
+─────────────────────────────────────────── */
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Brand: red theme #A91F13 → #F13953 */
+  --color-brand-50: #fff0f2;
+  --color-brand-100: #ffe0e5;
+  --color-brand-200: #ffc1cb;
+  --color-brand-300: #ff8e9d;
+  --color-brand-400: #f5617a;
+  --color-brand-500: #f13953;
+  --color-brand-600: #d42e45;
+  --color-brand-700: #a91f13;
+  --color-brand-800: #8a1910;
+  --color-brand-900: #5c100b;
+  --color-android: #3ddc84;
+  --color-ios: #f13953;
+}
+
+/* ───────────────────────────────────────────
+   Base
+─────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Keyboard focus ring */
+:focus-visible {
+  outline: 2px solid #f13953;
+  outline-offset: 2px;
+}
+
+/* Reduced-motion: disable all decorative animations */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  body {
+    transition: none;
+  }
+  .animated-gradient {
+    animation: none;
+    background-position: 0% 50%;
+  }
+  .pulse-ring::before {
+    animation: none;
+    opacity: 0.3;
+  }
+  .glass-card:hover {
+    transform: none;
+  }
+}
+
+/* Custom scrollbar - non-Apple only (Safari uses its own overlay scrollbar) */
+html.non-apple::-webkit-scrollbar {
+  width: 6px;
+}
+html.non-apple::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+}
+html.non-apple::-webkit-scrollbar-thumb {
+  background: #f13953;
+  border-radius: 3px;
+}
+
+/* ───────────────────────────────────────────
+   Glass utility classes
+─────────────────────────────────────────── */
+.glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+}
+
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  background: var(--card-hover);
+  border-color: rgba(241, 57, 83, 0.25);
+  transform: translateY(-4px);
+}
+
+/* ───────────────────────────────────────────
+   Typography
+─────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #a91f13 0%, #f13953 60%, #f5617a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ───────────────────────────────────────────
+   Glows
+─────────────────────────────────────────── */
+.glow-brand {
+  box-shadow:
+    0 0 30px rgba(241, 57, 83, 0.28),
+    0 0 60px rgba(241, 57, 83, 0.1);
+}
+.glow-brand-sm {
+  box-shadow: 0 0 15px rgba(241, 57, 83, 0.22);
+}
+
+/* No glow in light mode - looks out of place on white backgrounds */
+@media (prefers-color-scheme: light) {
+  .glow-brand {
+    box-shadow: none;
+  }
+  .glow-brand-sm {
+    box-shadow: none;
+  }
+}
+
+/* ───────────────────────────────────────────
+   Phone drop shadow
+─────────────────────────────────────────── */
+.phone-shadow {
+  filter: drop-shadow(0 30px 60px rgba(241, 57, 83, 0.12))
+    drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
+}
+
+@media (prefers-color-scheme: light) {
+  .phone-shadow {
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.12))
+      drop-shadow(0 4px 16px rgba(0, 0, 0, 0.08));
+  }
+}
+
+/* ───────────────────────────────────────────
+   Gradient border helper
+─────────────────────────────────────────── */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(241, 57, 83, 0.5),
+    rgba(245, 97, 122, 0.3),
+    transparent
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ───────────────────────────────────────────
+   Noise texture overlay
+─────────────────────────────────────────── */
+.noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ───────────────────────────────────────────
+   Animated hero gradient - adapts to theme
+─────────────────────────────────────────── */
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animated-gradient {
+  will-change: background-position;
+  background: linear-gradient(
+    -45deg,
+    var(--gradient-bg-1),
+    var(--gradient-bg-2),
+    var(--gradient-bg-3),
+    var(--gradient-bg-1)
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 12s ease infinite;
+}
+
+/* ───────────────────────────────────────────
+   Pulse ring (live badge)
+─────────────────────────────────────────── */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: rgba(241, 57, 83, 0.3);
+  animation: pulse-ring 2s ease-out infinite;
 }

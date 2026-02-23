@@ -1,0 +1,78 @@
+{
+  "ios": [
+    {
+      "label": "Virtual Table",
+      "description": "Real-time departure board with live delays",
+      "dark": "/screenshots/ios/virtual-table-dark.png",
+      "light": "/screenshots/ios/virtual-table-light.png"
+    },
+    {
+      "label": "Trip Planner",
+      "description": "Smart routing across all MHD lines",
+      "dark": "/screenshots/ios/trip-planner-dark.png",
+      "light": "/screenshots/ios/trip-planner-light.png"
+    },
+    {
+      "label": "Timetables",
+      "description": "Full schedule for any stop and line",
+      "dark": "/screenshots/ios/timetables-dark.png",
+      "light": "/screenshots/ios/timetables-light.png"
+    },
+    {
+      "label": "Timetable",
+      "description": "Complete timetable for a specific line",
+      "dark": "/screenshots/ios/timetable-dark.png",
+      "light": "/screenshots/ios/timetable-light.png"
+    },
+    {
+      "label": "Map",
+      "description": "Interactive map of all stops and routes",
+      "dark": "/screenshots/ios/map-dark.png",
+      "light": "/screenshots/ios/map-light.png"
+    },
+    {
+      "label": "Map & Departures",
+      "description": "Live departures overlaid on the map",
+      "dark": "/screenshots/ios/map-departures-dark.png",
+      "light": "/screenshots/ios/map-departures-light.png"
+    },
+    {
+      "label": "Stop List",
+      "description": "Browse all stops in the network",
+      "dark": "/screenshots/ios/stop-list-dark.png",
+      "light": "/screenshots/ios/stop-list-light.png"
+    }
+  ],
+  "android": [
+    {
+      "label": "Virtual Table",
+      "description": "Real-time departure board with live delays",
+      "dark": "/screenshots/android/virtual-table-dark.png",
+      "light": "/screenshots/android/virtual-table-light.png"
+    },
+    {
+      "label": "Trip Planner",
+      "description": "Smart routing across all MHD lines",
+      "dark": "/screenshots/android/trip-planner-dark.png",
+      "light": "/screenshots/android/trip-planner-light.png"
+    },
+    {
+      "label": "Timetables",
+      "description": "Full schedule for any stop and line",
+      "dark": "/screenshots/android/timetables-dark.png",
+      "light": "/screenshots/android/timetables-light.png"
+    },
+    {
+      "label": "Timetable",
+      "description": "Complete timetable for a specific line",
+      "dark": "/screenshots/android/timetable-dark.png",
+      "light": "/screenshots/android/timetable-light.png"
+    },
+    {
+      "label": "Map",
+      "description": "Interactive map of all stops and routes",
+      "dark": "/screenshots/android/map-dark.png",
+      "light": "/screenshots/android/map-light.png"
+    }
+  ]
+}
