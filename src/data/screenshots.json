@@ -3,76 +3,76 @@
     {
       "label": "Virtual Table",
       "description": "Real-time departure board with live delays",
-      "dark": "/screenshots/ios/virtual-table-dark.png",
-      "light": "/screenshots/ios/virtual-table-light.png"
+      "dark": "/screenshots/ios/virtual-table-dark.webp",
+      "light": "/screenshots/ios/virtual-table-light.webp"
     },
     {
       "label": "Trip Planner",
       "description": "Smart routing across all MHD lines",
-      "dark": "/screenshots/ios/trip-planner-dark.png",
-      "light": "/screenshots/ios/trip-planner-light.png"
+      "dark": "/screenshots/ios/trip-planner-dark.webp",
+      "light": "/screenshots/ios/trip-planner-light.webp"
     },
     {
       "label": "Timetables",
       "description": "Full schedule for any stop and line",
-      "dark": "/screenshots/ios/timetables-dark.png",
-      "light": "/screenshots/ios/timetables-light.png"
+      "dark": "/screenshots/ios/timetables-dark.webp",
+      "light": "/screenshots/ios/timetables-light.webp"
     },
     {
       "label": "Timetable",
       "description": "Complete timetable for a specific line",
-      "dark": "/screenshots/ios/timetable-dark.png",
-      "light": "/screenshots/ios/timetable-light.png"
+      "dark": "/screenshots/ios/timetable-dark.webp",
+      "light": "/screenshots/ios/timetable-light.webp"
     },
     {
       "label": "Map",
       "description": "Interactive map of all stops and routes",
-      "dark": "/screenshots/ios/map-dark.png",
-      "light": "/screenshots/ios/map-light.png"
+      "dark": "/screenshots/ios/map-dark.webp",
+      "light": "/screenshots/ios/map-light.webp"
     },
     {
       "label": "Map & Departures",
       "description": "Live departures overlaid on the map",
-      "dark": "/screenshots/ios/map-departures-dark.png",
-      "light": "/screenshots/ios/map-departures-light.png"
+      "dark": "/screenshots/ios/map-departures-dark.webp",
+      "light": "/screenshots/ios/map-departures-light.webp"
     },
     {
       "label": "Stop List",
       "description": "Browse all stops in the network",
-      "dark": "/screenshots/ios/stop-list-dark.png",
-      "light": "/screenshots/ios/stop-list-light.png"
+      "dark": "/screenshots/ios/stop-list-dark.webp",
+      "light": "/screenshots/ios/stop-list-light.webp"
     }
   ],
   "android": [
     {
       "label": "Virtual Table",
       "description": "Real-time departure board with live delays",
-      "dark": "/screenshots/android/virtual-table-dark.png",
-      "light": "/screenshots/android/virtual-table-light.png"
+      "dark": "/screenshots/android/virtual-table-dark.webp",
+      "light": "/screenshots/android/virtual-table-light.webp"
     },
     {
       "label": "Trip Planner",
       "description": "Smart routing across all MHD lines",
-      "dark": "/screenshots/android/trip-planner-dark.png",
-      "light": "/screenshots/android/trip-planner-light.png"
+      "dark": "/screenshots/android/trip-planner-dark.webp",
+      "light": "/screenshots/android/trip-planner-light.webp"
     },
     {
       "label": "Timetables",
       "description": "Full schedule for any stop and line",
-      "dark": "/screenshots/android/timetables-dark.png",
-      "light": "/screenshots/android/timetables-light.png"
+      "dark": "/screenshots/android/timetables-dark.webp",
+      "light": "/screenshots/android/timetables-light.webp"
     },
     {
       "label": "Timetable",
       "description": "Complete timetable for a specific line",
-      "dark": "/screenshots/android/timetable-dark.png",
-      "light": "/screenshots/android/timetable-light.png"
+      "dark": "/screenshots/android/timetable-dark.webp",
+      "light": "/screenshots/android/timetable-light.webp"
     },
     {
       "label": "Map",
       "description": "Interactive map of all stops and routes",
-      "dark": "/screenshots/android/map-dark.png",
-      "light": "/screenshots/android/map-light.png"
+      "dark": "/screenshots/android/map-dark.webp",
+      "light": "/screenshots/android/map-light.webp"
     }
   ]
 }

@@ -123,10 +123,8 @@ export default function Hero({
     scheme === 'dark' ? 'dark' : 'light'
   ]
 
-  // Pick a random group once on mount via lazy initializer
-  const [groupIndex] = useState(() =>
-    Math.floor(Math.random() * SLOGAN_GROUPS.length),
-  )
+  // UTC hour % length — deterministic on both server and client, changes each hour
+  const [groupIndex] = useState(() => new Date().getUTCHours() % SLOGAN_GROUPS.length)
   const group = SLOGAN_GROUPS[groupIndex]
 
   const iosButton = (

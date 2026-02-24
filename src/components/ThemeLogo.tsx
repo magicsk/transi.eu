@@ -3,8 +3,8 @@
 import Image from 'next/image'
 import { useColorScheme } from '@/lib/useColorScheme'
 
-const LOGO_DARK = '/logo/transi-iOS-Dark-1024x1024@1x.png'
-const LOGO_LIGHT = '/logo/transi-iOS-Default-1024x1024@1x.png'
+const LOGO_DARK = '/logo/transi-iOS-Dark-1024x1024@1x.webp'
+const LOGO_LIGHT = '/logo/transi-iOS-Default-1024x1024@1x.webp'
 
 interface Props {
   className?: string
