@@ -28,7 +28,7 @@ const features = [
     icon: Navigation,
     title: 'Trip Planner',
     description:
-      'Plan your journey with routes from multiple sources. Long-press results to get persistent trip notifications (android only).',
+      'Plan your journey with routes from multiple sources. Long-press results to get persistent trip notifications (Android only).',
     color: 'from-sky-500/15 to-sky-600/8',
     border: 'border-sky-500/20',
     accent: 'text-sky-500',
@@ -46,7 +46,7 @@ const features = [
     icon: Bell,
     title: 'Live Notifications',
     description:
-      'Long-press any departure to pin a real-time updating notification to your status bar. Never miss a connection.',
+      'Long-press any departure to pin a notification that updates in real time to your status bar. Never miss a connection.',
     color: 'from-amber-500/15 to-amber-600/8',
     border: 'border-amber-500/20',
     accent: 'text-amber-500',
@@ -56,7 +56,7 @@ const features = [
     icon: Map,
     title: 'Transit Map',
     description:
-      'Interactive map with all public transport stop in region of Bratislava. Find the closest stop and browse departures or find directions from the map.',
+      'An interactive map with all public transport stops in the Bratislava region. Find the closest stop and browse departures or get directions from the map.',
     color: 'from-emerald-500/15 to-emerald-600/8',
     border: 'border-emerald-500/20',
     accent: 'text-emerald-500',
@@ -73,18 +73,18 @@ const features = [
   },
   {
     icon: Save,
-    title: 'Havy caching',
+    title: 'Heavy Caching',
     description:
-      'Stops database and map tiles are cached locally for minimal data usage. Soon also trip planner and timetables available offline.',
+      'The stop database and map tiles are cached locally for minimal data usage. The trip planner and timetables will also be available offline soon.',
     color: 'from-teal-500/15 to-teal-600/8',
     border: 'border-teal-500/20',
     accent: 'text-teal-500',
   },
   {
     icon: Share2,
-    title: 'Share with friends',
+    title: 'Share with Friends',
     description:
-      'Share stop departure boards or trip plans with friends. Native iOS sharing and Android intents supported.',
+      'Share stop departure boards or trip plans with friends. Native iOS sharing and Android intents are supported.',
     color: 'from-indigo-500/15 to-indigo-600/8',
     border: 'border-indigo-500/20',
     accent: 'text-indigo-500',

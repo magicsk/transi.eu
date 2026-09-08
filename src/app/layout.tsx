@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Transi',
   description:
-    'Native iOS & Android app for public transport in Bratislava. Real-time departures, trip planner and timetables for public transport in Bratislava.',
+    'A native iOS & Android app for public transport in Bratislava. Real-time departures, a trip planner, and timetables for public transport in Bratislava.',
   keywords: [
     'MHD Bratislava',
     'public transport',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Transi',
     description:
-      'Real-time departures, trip planner & timetables for MHD Bratislava.',
+      'Real-time departures, a trip planner & timetables for MHD Bratislava.',
     type: 'website',
     images: [
       {

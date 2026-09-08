@@ -1,6 +1,6 @@
 # Transi.eu
 
-Landing page for [Transi](https://github.com/magicsk/Transi)/[Transi-Swift](https://github.com/magicsk/Transi-swift) — a native public transport app for Bratislava Region, available on iOS and Android.
+Landing page for [Transi](https://github.com/magicsk/Transi)/[Transi-Swift](https://github.com/magicsk/Transi-swift) — a native public transport app for the Bratislava region, available on iOS and Android.
 
 Built with Next.js App Router and deployed as a static-ish site with hourly ISR revalidation for live release data fetched from GitHub.
 

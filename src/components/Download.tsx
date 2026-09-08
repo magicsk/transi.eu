@@ -236,7 +236,7 @@ export default function Download({
 
             <p className="text-[var(--text-muted)] text-sm leading-relaxed mb-8">
               Install via AltStore or SideStore for automatic updates, or
-              sideload the IPA manually. Requires iOS 16+ or later.
+              sideload the IPA manually. Requires iOS 16 or later.
             </p>
 
             <div className="space-y-3">
