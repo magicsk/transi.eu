@@ -68,8 +68,8 @@ html.non-apple::-webkit-scrollbar-thumb { background: var(--red); border-radius:
 .net svg { position: absolute; top: 0; left: 50%; transform: translateX(-50%); }
 .net path { fill: none; stroke: var(--faint); stroke-width: 12; stroke-linejoin: round; stroke-linecap: round; }
 .net circle { fill: var(--ground); stroke: var(--faint); stroke-width: 6; }
-.net .train { stroke: var(--car); animation: train infinite; } /* durations, steps, dashes and the keyframes come with Network.tsx */
-.net .fill { fill: var(--car); stroke: none; animation: lit step-end infinite; } /* on at a train's arrival, off LIT later */
+.net .train { stroke: var(--car); animation: train linear infinite; } /* durations, dashes and the keyframes come with Network.tsx */
+.net .fill { fill: var(--car); stroke: none; opacity: 0; transform-box: fill-box; transform-origin: center; animation: lit linear infinite; }
 /* held still (one paused frame) on phones and touch devices, for reduced motion, and on slow or metered
    connections and low-end machines (.still, from layout.tsx) */
 .still .net .train, .still .net .fill { animation-play-state: paused; }
@@ -161,7 +161,11 @@ h2 { font: 800 clamp(48px, 6.4vw, 92px)/.88 var(--display); letter-spacing: -.01
 /* --st (set by Route.tsx) is where the station sits along the card's top edge: Android's is in the route's lane */
 .term::after { content: ''; position: absolute; left: calc(var(--st, 33px) - 22px); top: -22px; width: 44px; height: 44px; border-radius: 50%; background: var(--ground); border: 10px solid var(--ink); }
 .th { display: flex; align-items: center; gap: 16px; }
-.th img { width: 60px; height: 60px; border-radius: 14px; }
+.th img, .aicon { width: 60px; height: 60px; border-radius: 14px; }
+/* Android's icon as its launcher draws it: the adaptive icon (flat mark on one colour) in a circle. Ink, not the
+   app's white, so it's the opposite of the page, like the iOS icon (Download.tsx) */
+.aicon { display: grid; place-items: center; flex: none; border-radius: 50%; background: var(--ink); box-shadow: 0 1px 2px rgba(14, 16, 18, .16), 0 4px 12px rgba(14, 16, 18, .16); } /* lifted, like on a home screen */
+.aicon svg { width: 68%; fill: var(--red); }
 .th h3 { font: 800 54px/.9 var(--display); }
 .th p { font-size: 16px; font-weight: 600; color: var(--ink2); margin-top: 4px; }
 .tp { color: var(--ink2); margin: 16px 0 20px; font-size: 17px; min-height: 3em; }
@@ -222,7 +226,7 @@ footer { margin-top: 88px; padding: 26px 0 40px; display: flex; flex-wrap: wrap;
   .term { padding: 30px 18px 18px; }
   .term::after { left: calc(var(--st, 32px) - 13px); top: -13px; width: 26px; height: 26px; border-width: 6px; }
   .th h3 { font-size: 44px; }
-  .th img { width: 52px; height: 52px; }
+  .th img, .aicon { width: 52px; height: 52px; }
   .tp { min-height: 0; }
   .badge { left: -20px; top: -20px; width: 40px; height: 40px; border-radius: 12px; }
   .badge .mk { width: 25px; height: 24px; margin-top: 2px; }

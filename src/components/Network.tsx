@@ -7,17 +7,12 @@ type Pt = [number, number]
 // line, and empties a while after it leaves. All of it is CSS: one keyframes for the trains and one for the
 // fills, each element only gets its own delay. Where it should hold still (globals.css), it's paused, so it
 // still shows a frame with trains out and some stops filled.
-// It's background, so it moves in ticks, TICK times a second: trains step, fills switch on and off, and every
-// delay is a whole number of ticks, so the whole network changes on the same frames and the page repaints
-// TICK times a second instead of every frame.
 // ponytail: a page taller than H gets no network below H; raise H if the page grows.
 const W = 2400, H = 9600
 const TRAIN = 640, PERIOD = 2600, SPEED = 100 // a train every PERIOD along the line, in px and px/s
-const T = PERIOD / SPEED // 26s, a whole number of ticks
-const TICK = 12 // ponytail: steps of SPEED / TICK = 8px; raise it for smoother trains at more repaints
-const tick = (s: number) => Math.round(s * TICK) / TICK
-const pct = (s: number) => ((s / T) * 100).toFixed(3) + '%' // seconds into a run, as a keyframe offset
-const LIT = tick((TRAIN + 600) / SPEED) // how long a stop stays filled
+const T = PERIOD / SPEED
+const pct = (s: number) => ((s / T) * 100).toFixed(2) + '%' // seconds into a run, as a keyframe offset
+const POP = 0.25, LIT = (TRAIN + 600) / SPEED // a fill pops in as fast as the red line's; how long it stays
 
 let seed = 7
 const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647
@@ -52,7 +47,7 @@ function walk(home: number, across: boolean) {
 }
 
 // a negative delay, so everything is already mid-run on load
-const delay = (t: number) => `${-tick(((t % T) + T) % T).toFixed(4)}s`
+const delay = (t: number) => `${-(((t % T) + T) % T).toFixed(2)}s`
 
 const LINES = [
   ...[240, 700, 1200, 1700, 2160].map((x) => walk(x, false)),
@@ -63,7 +58,7 @@ export default function Network() {
   return (
     <div className="net" aria-hidden="true">
       <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
-        <style>{`.net .train{stroke-dasharray:${TRAIN} ${PERIOD - TRAIN};animation-duration:${T}s;animation-timing-function:steps(${T * TICK})}.net .fill{animation-duration:${T}s}@keyframes train{to{stroke-dashoffset:-${PERIOD}}}@keyframes lit{0%{opacity:1}${pct(LIT)},100%{opacity:0}}`}</style>
+        <style>{`.net .train{stroke-dasharray:${TRAIN} ${PERIOD - TRAIN};animation-duration:${T}s}.net .fill{animation-duration:${T}s}@keyframes train{to{stroke-dashoffset:-${PERIOD}}}@keyframes lit{0%,${pct(LIT + POP)},100%{opacity:0;transform:scale(.3)}${pct(POP)},${pct(LIT)}{opacity:1;transform:none}}`}</style>
         {LINES.map((l, i) => (
           <path key={i} d={l.d} />
         ))}

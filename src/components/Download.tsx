@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Code, Copy, Download as DownloadIcon, ExternalLink, SquarePlus } from 'lucide-react'
 import type { ReleaseInfo } from '@/lib/github'
 import Shot from '@/components/Shot'
+import Mark from '@/components/Mark'
 
 const ALTSTORE_REPO = 'https://api.magicsk.eu/transi/store.json'
 const ALTSTORE_INSTALL = 'altstore://source?url=' + encodeURIComponent(ALTSTORE_REPO)
@@ -14,10 +15,12 @@ const GITHUB_IOS = 'https://github.com/magicsk/Transi-swift'
 // "Version 1.4.1, " or nothing when GitHub could not be reached
 const version = (r: ReleaseInfo) => (r.version !== '-' ? `Version ${r.version}, ` : '')
 
+// The iOS icon; Android's is drawn (.aicon), flat like its adaptive icon. Both are the other way round from the
+// page on purpose, the dark icon on the light page and the light one on the dark page, so they stand off it.
 const AppIcon = () => (
   <Shot
-    dark="/logo/transi-iOS-Dark-1024x1024@1x.webp"
-    light="/logo/transi-iOS-Default-1024x1024@1x.webp"
+    dark="/logo/transi-iOS-Default-1024x1024@1x.webp"
+    light="/logo/transi-iOS-Dark-1024x1024@1x.webp"
     width={1024}
     height={1024}
     alt=""
@@ -51,7 +54,9 @@ export default function Download({ android, ios }: { android: ReleaseInfo; ios: 
       <div className="inst">
         <div className="term android" id="install-android">
           <div className="th">
-            <AppIcon />
+            <span className="aicon">
+              <Mark />
+            </span>
             <div>
               <h3>Android</h3>
               <p>{version(android)}Kotlin</p>
