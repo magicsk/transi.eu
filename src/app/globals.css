@@ -2,13 +2,13 @@
    Red is spent on the line only; glass only on the tram badge and secondary buttons. */
 :root {
   --ground: #ffffff; --surface: #f1f2f4; --tint: #e6e8eb; --faint: #eceef0; --ink: #0e1012; --ink2: #50555c; --red: #f13953; --car: #d3d6da;
-  --btn: #0e1012; --btn-h: #2b2f34; --btn-on: #fff; --spine: 10px;
+  --btn: #0e1012; --btn-h: #2b2f34; --btn-on: #fff; --spine: 10px; --bezel: var(--ink);
   --glass: rgba(14, 16, 18, .06); --glass-edge: rgba(14, 16, 18, .22); --glass-top: rgba(255, 255, 255, .9);
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --ground: #000000; --surface: #17181a; --tint: #2a2c30; --faint: #1c1d20; --ink: #ffffff; --ink2: #a8adb4; --car: #3a3d42;
-    --btn: #ffffff; --btn-h: #d9dbde; --btn-on: #000;
+    --btn: #ffffff; --btn-h: #d9dbde; --btn-on: #000; --bezel: #45494f; /* a white frame would outshine the screen */
     --glass: rgba(255, 255, 255, .09); --glass-edge: rgba(255, 255, 255, .2); --glass-top: rgba(255, 255, 255, .34);
   }
 }
@@ -51,13 +51,16 @@ html.non-apple::-webkit-scrollbar-thumb { background: var(--red); border-radius:
 .strip a:hover::before, .strip a:focus-visible::before { transform: scale(1.25); }
 .strip a.on::after, .strip a:hover::after, .strip a:focus-visible::after { opacity: 1; transform: none; }
 .strip a:focus-visible { outline-offset: 6px; }
-.navfade { display: none; }
-.stop, #install, .term { scroll-margin-top: 16px; }
+.navfade, .go { display: none; }
+.go { position: fixed; top: 16px; right: 16px; z-index: 6; padding: 8px 18px; border-radius: 8px; font-weight: 700; font-size: 16px; text-decoration: none; }
+.stop, #install { scroll-margin-top: 16px; }
+.term { scroll-margin-top: 40px; } /* room for the tram on the station */
 @media (min-width: 901px) {
   /* the strip stays with you; behind it the page colour fades out, so there is no bar and no edge */
   .nav { position: sticky; top: 0; }
   .navfade { display: block; position: fixed; inset: 0 0 auto 0; height: 136px; z-index: 4; pointer-events: none; background: linear-gradient(var(--ground) 56%, transparent); }
-  .stop, #install, .term { scroll-margin-top: 84px; }
+  .stop, #install { scroll-margin-top: 84px; }
+  .term { scroll-margin-top: 160px; } /* clear of .navfade with the tram on the station; Route lands the iOS tram here too */
 }
 
 /* hero */
@@ -65,12 +68,16 @@ html.non-apple::-webkit-scrollbar-thumb { background: var(--red); border-radius:
 .net svg { position: absolute; top: 0; left: 50%; transform: translateX(-50%); }
 .net path { fill: none; stroke: var(--faint); stroke-width: 12; stroke-linejoin: round; stroke-linecap: round; }
 .net circle { fill: var(--ground); stroke: var(--faint); stroke-width: 6; }
-.net .train { stroke: var(--car); animation: train linear infinite; } /* durations, dashes and the keyframes come with Network.tsx */
-.net .fill { fill: var(--car); stroke: none; opacity: 0; transform-box: fill-box; transform-origin: center; animation: lit linear infinite; }
+.net .train { stroke: var(--car); animation: train infinite; } /* durations, steps, dashes and the keyframes come with Network.tsx */
+.net .fill { fill: var(--car); stroke: none; animation: lit step-end infinite; } /* on at a train's arrival, off LIT later */
 /* held still (one paused frame) on phones and touch devices, for reduced motion, and on slow or metered
    connections and low-end machines (.still, from layout.tsx) */
 .still .net .train, .still .net .fill { animation-play-state: paused; }
 @media (max-width: 900px), (hover: none), (prefers-reduced-motion: reduce) { .net .train, .net .fill { animation-play-state: paused; } }
+/* reading text gets a halo, like the labels on a map: the network stops short of it. z-index -2 puts it under
+   the red line (.line is -1), which still runs through. */
+.lede, .meta, .s-lede, .txt > p { position: relative; }
+.lede::before, .meta::before, .s-lede::before, .txt > p::before, .minor::before { content: ''; position: absolute; inset: 0; z-index: -2; background: var(--ground); box-shadow: 0 0 24px 16px var(--ground); }
 main { position: relative; isolation: isolate; --sw: 440px; --dx: calc(var(--sw) + 23px); } /* --dx: middle lane minus left lane; a swing this tall is exactly 45 degrees */
 .hero { position: relative; padding: 36px 0 150px; }
 .hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 80px; align-items: end; }
@@ -79,7 +86,7 @@ h1 span { display: block; }
 .tag { font: 600 clamp(26px, 3vw, 42px)/1.05 var(--display); margin-top: 28px; }
 .lede { font-size: 20px; color: var(--ink2); max-width: 31em; margin-top: 18px; }
 .meta { margin-top: 18px; font-size: 16px; color: var(--ink2); }
-.phone { border-radius: 42px; overflow: hidden; background: var(--surface); box-shadow: 0 0 0 6px var(--ink); position: relative; z-index: 1; }
+.phone { border-radius: 42px; overflow: hidden; background: var(--surface); box-shadow: 0 0 0 6px var(--bezel); position: relative; z-index: 1; }
 .hero .phone { margin-bottom: -110px; } /* the line leaves from behind it, below the text */
 /* the hero phone shows the visitor's platform (data-platform is set before first paint, see layout.tsx) */
 .hero .phone .android, [data-platform=android] .hero .phone .ios { display: none; }
@@ -88,13 +95,15 @@ h1 span { display: block; }
 
 /* platform buttons: one component for both. The visitor's platform is filled and first; the other is glass. */
 .plats { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+.pbtn.ios.first, [data-platform=ios] .pbtn.ios.last { display: none; } /* one iOS button: before Android for Apple visitors (Hero.tsx) */
+[data-platform=ios] .pbtn.ios.first { display: flex; }
 /* glass, used sparingly: the tram badge and secondary buttons. Never the nav, never anything that carries the map. */
-.pbtn, .act { background: var(--glass); -webkit-backdrop-filter: blur(14px) saturate(1.5); backdrop-filter: blur(14px) saturate(1.5); box-shadow: inset 0 0 0 1px var(--glass-edge), inset 0 1px 0 var(--glass-top); }
+.pbtn, .act, .go { background: var(--glass); -webkit-backdrop-filter: blur(14px) saturate(1.5); backdrop-filter: blur(14px) saturate(1.5); box-shadow: inset 0 0 0 1px var(--glass-edge), inset 0 1px 0 var(--glass-top); }
 .pbtn { display: flex; align-items: center; gap: 14px; min-width: 262px; padding: 12px 24px 12px 18px; border-radius: 8px; text-decoration: none; }
 .pbtn b { display: block; font-weight: 700; font-size: 19px; line-height: 1.25; }
 .pbtn small { display: block; font-size: 14px; line-height: 1.3; opacity: .78; }
 .pbtn:hover, .act:hover { box-shadow: inset 0 0 0 2px var(--ink); }
-[data-platform=android] .pbtn.android, [data-platform=ios] .pbtn.ios { order: -1; background: var(--btn); color: var(--btn-on); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+[data-platform=android] .pbtn.android, [data-platform=ios] .pbtn.ios { background: var(--btn); color: var(--btn-on); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
 [data-platform=android] .pbtn.android:hover, [data-platform=ios] .pbtn.ios:hover { background: var(--btn-h); box-shadow: none; }
 
 /* the network: one path with round joins and caps, every bend the same radius (drawn by Route.tsx) */
@@ -132,13 +141,12 @@ h2 { font: 800 clamp(48px, 6.4vw, 92px)/.88 var(--display); letter-spacing: -.01
 .dot.passed::after { opacity: 1; transform: none; }
 .stop h3 { font: 800 clamp(40px, 5.4vw, 78px)/.9 var(--display); letter-spacing: -.01em; }
 .stop p { max-width: 25em; margin-top: 16px; color: var(--ink2); font-size: 20px; }
-.xc { display: flex; gap: 6px; margin-top: 14px; }
 .pf { font: 600 14px/1.5 var(--body); padding: 3px 9px; border-radius: 4px; white-space: nowrap; box-shadow: inset 0 0 0 2px var(--ink); }
 .swing { height: var(--dx); margin-top: 28px; }
 .even + .swing { margin-top: 8px; }
 .shots { display: flex; gap: 16px; align-items: flex-start; }
 .shots figure { width: 212px; }
-.shots .phone { border-radius: 30px; box-shadow: 0 0 0 4px var(--ink); }
+.shots .phone { border-radius: 30px; box-shadow: 0 0 0 4px var(--bezel); }
 .shots figcaption { font-size: 14px; color: var(--ink2); text-align: center; margin-top: 10px; }
 .swing + .stop.odd .shots { margin-top: -200px; } /* phones tuck in beside the swing above */
 /* no screenshot yet */
@@ -164,6 +172,8 @@ button.act { width: 100%; border: 0; font: inherit; color: inherit; text-align: 
 .act small { display: block; font-size: 14px; opacity: .8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .act.main { background: var(--btn); color: var(--btn-on); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
 .act.main:hover { background: var(--btn-h); box-shadow: none; }
+.new { font-size: 15px; color: var(--ink2); margin: 12px 0 2px; }
+.new a { color: var(--ink); font-weight: 600; }
 .act .src { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
 footer { margin-top: 88px; padding: 26px 0 40px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; color: var(--ink2); font-size: 15px; border-top: 2px solid var(--ink); }
 
@@ -173,7 +183,9 @@ footer { margin-top: 88px; padding: 26px 0 40px; display: flex; flex-wrap: wrap;
 @keyframes rise { from { opacity: 0; transform: translateY(24px); } }
 @keyframes phone { from { opacity: 0; transform: translateY(56px); } }
 @keyframes roll { from { opacity: 0; transform: translateX(var(--roll, 0px)); } 25% { opacity: 1; } }
-.intro .hero h1 span, .intro .hero .tag, .intro .hero .lede, .intro .hero .plats, .intro .hero .meta { animation: rise .55s cubic-bezier(.2, .7, .2, 1) both; }
+/* backwards, not both: an animation still in effect keeps its own stacking context, which would lift the text
+   halos (z-index -2) over the text above them */
+.intro .hero h1 span, .intro .hero .tag, .intro .hero .lede, .intro .hero .plats, .intro .hero .meta { animation: rise .55s cubic-bezier(.2, .7, .2, 1) backwards; }
 .intro .hero h1 span + span { animation-delay: .07s; }
 .intro .hero .tag { animation-delay: .15s; }
 .intro .hero .lede { animation-delay: .21s; }
@@ -189,6 +201,7 @@ footer { margin-top: 88px; padding: 26px 0 40px; display: flex; flex-wrap: wrap;
   body { font-size: 17px; }
   .wrap { padding: 0 16px; }
   .strip { display: none; }
+  .go { display: block; }
   .net { opacity: .7; }
   .hero { padding: 20px 0 56px; }
   .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
@@ -201,8 +214,8 @@ footer { margin-top: 88px; padding: 26px 0 40px; display: flex; flex-wrap: wrap;
   .stop p { font-size: 17px; }
   .swing { display: none; }
   .shots, .swing + .stop.odd .shots, .head + .stop.even .shots { padding-left: 40px; margin-top: 22px; gap: 14px; }
-  .shots figure { width: auto; flex: 1; min-width: 0; }
-  .shots .phone { border-radius: 22px; box-shadow: 0 0 0 3px var(--ink); }
+  .shots figure { width: auto; flex: 1; min-width: 0; max-width: 240px; }
+  .shots .phone { border-radius: 22px; box-shadow: 0 0 0 3px var(--bezel); }
   .end { padding: 56px 0 0 40px; }
   /* the gap leaves room for the line to jog from the gutter into the iOS station */
   .inst { grid-template-columns: minmax(0, 1fr); padding-left: 40px; gap: 124px; margin-top: 120px; }

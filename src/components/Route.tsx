@@ -215,15 +215,18 @@ export default function Route() {
       if (V.length < 2) return
       const half = innerHeight / 2 - (m.top + scrollY) // + scroll position = the height of mid-screen in main
       // Sticky boxes can't carry the tram along a level run, so it parks where one starts and onward() takes it
-      // the rest of the way, a pixel of line per pixel of scroll, or faster if the page would end before the
-      // station. That can lag a frame, but never leaves the line: the page doesn't move under a parked tram.
+      // the rest of the way, a pixel of line per pixel of scroll, or faster so it arrives while the station is
+      // still in view: where the iOS button in the hero scrolls the card to (its scroll-margin-top), or the end
+      // of the page if that comes first. That can lag a frame, but never leaves the line: the page doesn't move
+      // under a parked tram.
       const max = document.documentElement.scrollHeight - innerHeight
       park = null
       if (level >= 0 && !calm) {
         const way = [V[V.length - 1], ...flat.slice(level)], top = V[V.length - 1][1] - half
+        const land = Math.min(max, I.t + m.top + scrollY - parseFloat(getComputedStyle(I.el).scrollMarginTop))
         let len = 0
         for (let j = 1; j < way.length; j++) len += Math.hypot(way[j][0] - way[j - 1][0], way[j][1] - way[j - 1][1])
-        park = { top, speed: Math.max(1, len / Math.max(1, max - top)), way }
+        park = { top, speed: Math.max(1, len / Math.max(1, land - top)), way }
       }
       onward()
       // on load the tram rolls in from the phone (CSS, .intro .badge)

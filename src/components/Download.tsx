@@ -44,7 +44,7 @@ export default function Download({ android, ios }: { android: ReleaseInfo; ios: 
       <div className="end" id="install">
         <h2>Last stop: install</h2>
         <p className="s-lede">
-          Transi is free, open-source, and distributed directly via GitHub. No app store required.
+          Free, open-source and straight from GitHub. No app store needed.
         </p>
       </div>
 
@@ -58,8 +58,8 @@ export default function Download({ android, ios }: { android: ReleaseInfo; ios: 
             </div>
           </div>
           <p className="tp">
-            Download the APK and install it on your device. You may need to enable “Install from
-            unknown sources” in settings.
+            Download the APK and open it. Android may ask you to allow installing apps from your
+            browser first.
           </p>
           <a className="act main" href={android.downloadUrl || GITHUB_ANDROID + '/releases/latest'}>
             <DownloadIcon size={22} aria-hidden="true" />
@@ -93,7 +93,7 @@ export default function Download({ android, ios }: { android: ReleaseInfo; ios: 
             </div>
           </div>
           <p className="tp">
-            Install via AltStore or SideStore for automatic updates, or sideload the IPA manually.
+            Add Transi to AltStore or SideStore for automatic updates, or sideload the IPA yourself.
           </p>
           <a className="act main" href={ALTSTORE_INSTALL}>
             <SquarePlus size={22} aria-hidden="true" />
@@ -109,6 +109,18 @@ export default function Download({ android, ios }: { android: ReleaseInfo; ios: 
               <small>Alternative to AltStore</small>
             </span>
           </a>
+          {/* the Add buttons only work once one of the stores is on the phone */}
+          <p className="new">
+            New to sideloading? Set up{' '}
+            <a href="https://altstore.io" target="_blank" rel="noopener noreferrer">
+              AltStore
+            </a>{' '}
+            or{' '}
+            <a href="https://sidestore.io" target="_blank" rel="noopener noreferrer">
+              SideStore
+            </a>{' '}
+            first, then tap Add.
+          </p>
           <a className="act" href={ios.downloadUrl || GITHUB_IOS + '/releases/latest'}>
             <DownloadIcon size={22} aria-hidden="true" />
             <span>

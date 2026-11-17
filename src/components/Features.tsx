@@ -1,11 +1,9 @@
 import { Fragment } from 'react'
 import Shot, { screenshot } from '@/components/Shot'
 
-const BOTH = ['iOS', 'Android']
-
 interface Minor {
   title: string
-  on: string[]
+  only?: 'iOS' | 'Android' // badged only when it's on one platform; everything else runs on both
   text: string
 }
 
@@ -22,7 +20,7 @@ const stops: Stop[] = [
   {
     id: 'departures',
     title: 'Departure board',
-    text: 'Live departures for any stop, with real-time delays and vehicle details. Keep favourite stops and set a default one; on iOS, swipe a stop to favourite it. On Android the board also merges in regional buses and shows service info.',
+    text: 'Live departures for any stop, with real-time delays and vehicle details. Save favourite stops and set a default. On Android the board also shows regional buses and service info.',
     shots: [
       { name: 'ios/virtual-table', caption: 'iOS' },
       { name: 'android/virtual-table', caption: 'Android' },
@@ -30,15 +28,14 @@ const stops: Stop[] = [
     minors: [
       {
         title: 'Live departure notifications',
-        on: BOTH,
-        text: 'On Android, “Notify me” pins a live notification that keeps updating with the app closed, shown as a Live Update on Android 16 and later. On iOS it is a Live Activity, with Dynamic Island.',
+        text: 'Keep a departure on the lock screen: a Live Activity with Dynamic Island on iOS, a live notification on Android (a Live Update on Android 16 and later).',
       },
     ],
   },
   {
     id: 'planner',
     title: 'Trip planner',
-    text: 'Plan a journey with routes from two sources. Leave now or plan for an arrival time, and swipe between your recent searches.',
+    text: 'Routes from two sources. Leave now or arrive by a set time, and swipe between recent searches.',
     shots: [
       { name: 'ios/trip-planner', caption: 'iOS' },
       { name: 'android/trip-planner', caption: 'Android' },
@@ -46,20 +43,18 @@ const stops: Stop[] = [
     minors: [
       {
         title: 'Journey details on a map',
-        on: BOTH,
-        text: 'Every stop, platform, zone border, transfer time and live delay. On iOS, rides are drawn along the real roads and tracks.',
+        text: 'Every stop, platform, zone border, transfer and live delay. On iOS, rides follow the real roads and tracks.',
       },
       {
         title: 'IDS BK season pass',
-        on: BOTH,
-        text: 'Set your pass in Settings and trip details tell you whether it covers the trip, or which ticket to buy.',
+        text: 'Set your pass once and every trip tells you whether it’s covered, or which ticket to buy.',
       },
     ],
   },
   {
     id: 'trip',
     title: 'Start a trip',
-    text: 'Follow a trip step by step. Transi alerts you when to get off or change, warns you when you may miss a connection, and offers other options when you do. On iOS the trip shows on the map and as a Live Activity, follows your location and tells you how far your stop is. On Android it runs in a live notification.',
+    text: 'Transi tells you when to get off or change, warns you before you miss a connection and offers other options if you do. On iOS the trip follows your location on the map and in a Live Activity; on Android it runs in a live notification.',
     shots: [
       { name: 'ios/trip', caption: 'iOS' },
       { name: 'android/trip', caption: 'Android' },
@@ -76,8 +71,7 @@ const stops: Stop[] = [
     minors: [
       {
         title: 'Offline',
-        on: BOTH,
-        text: 'Download timetables and plan trips without a connection. On iOS, offline timetables are marked beta and the offline planner alpha.',
+        text: 'Download timetables and plan trips without a connection. On iOS, timetables are in beta and the planner in alpha.',
       },
     ],
   },
@@ -89,16 +83,9 @@ const stops: Stop[] = [
       { name: 'ios/map', caption: 'iOS' },
       { name: 'android/map', caption: 'Android' },
     ],
-    minors: [{ title: 'iPad', on: ['iOS'], text: 'Transi runs on iPad as well.' }],
+    minors: [{ title: 'iPad', only: 'iOS', text: 'Transi runs on iPad as well.' }],
   },
 ]
-
-const Platforms = ({ on }: { on: string[] }) =>
-  on.map((p) => (
-    <span className="pf" key={p}>
-      {p}
-    </span>
-  ))
 
 // Stops alternate between the middle lane ("even": phones left, text right) and the left lane ("odd"),
 // starting in the middle. The last stop always takes the left lane, so the line runs down the left edge
@@ -115,8 +102,8 @@ export default function Features() {
       <div className="head">
         <h2>What’s inside</h2>
         <p className="s-lede">
-          Five main stops, with smaller ones along the way. The badges show which platform each one
-          runs on.
+          Five main stops, with smaller ones along the way. Everything runs on iOS and Android
+          unless it says otherwise.
         </p>
       </div>
       {stops.map((stop, i) => {
@@ -126,14 +113,11 @@ export default function Features() {
           <div className="txt">
             <i className="dot" />
             <h3>{stop.title}</h3>
-            <div className="xc">
-              <Platforms on={BOTH} />
-            </div>
             <p>{stop.text}</p>
             {stop.minors?.map((m) => (
               <div className="minor" key={m.title}>
                 <h3>
-                  {m.title} <Platforms on={m.on} />
+                  {m.title} {m.only && <span className="pf">{m.only}</span>}
                 </h3>
                 <p>{m.text}</p>
               </div>
@@ -148,7 +132,7 @@ export default function Features() {
                   <Shot
                     {...screenshot(s.name)}
                     alt={`${stop.title}: ${s.caption}`}
-                    sizes="(max-width: 900px) 45vw, 212px"
+                    sizes="(max-width: 900px) min(45vw, 240px), 212px"
                   />
                 </div>
                 <figcaption>{s.caption}</figcaption>

@@ -105,6 +105,10 @@ export default function Navbar() {
             </a>
           ))}
         </nav>
+        {/* phones have no strip: this is their way to the install cards, and it stays put */}
+        <a className="go" href="#install">
+          Install
+        </a>
       </header>
     </>
   )

@@ -14,13 +14,14 @@ export default function Hero({ android, ios }: { android: ReleaseInfo; ios: Rele
           </h1>
           <p className="tag">Plan your trip. Track your ride. Skip the waiting.</p>
           <p className="lede">
-            Transi is a native iOS and Android app for Bratislava public transport: live departure
-            boards, a trip planner that follows your trip step by step, full timetables and a map
-            of every stop.
+            Transi is a native iOS and Android app for Bratislava public transport: live departures,
+            step-by-step trips, timetables and a map of every stop.
           </p>
-          {/* Both buttons are always rendered in this order; CSS fills the visitor's platform and
-              moves it first, from the data-platform attribute set before first paint (layout.tsx). */}
+          {/* The visitor's platform comes first and filled, from the data-platform attribute set before
+              first paint (layout.tsx). The iOS button is rendered on both sides of Android and CSS shows one,
+              so the order on screen is also the DOM order that Tab and screen readers follow. */}
           <div className="plats">
+            <IosButton ios={ios} at="first" />
             <a className="pbtn android" href="#install-android">
               <AndroidIcon />
               <span>
@@ -28,17 +29,13 @@ export default function Hero({ android, ios }: { android: ReleaseInfo; ios: Rele
                 <small>{version(android)}APK download</small>
               </span>
             </a>
-            <a className="pbtn ios" href="#install-ios">
-              <AppleIcon />
-              <span>
-                <b>Transi for iOS</b>
-                <small>{version(ios)}AltStore or IPA</small>
-              </span>
-            </a>
+            <IosButton ios={ios} at="last" />
           </div>
           <p className="meta">Free and open-source under GPL-3.0. Not in the app stores.</p>
         </div>
-        {/* The phone shows the visitor's platform; the other picture is display: none (same attribute). */}
+        {/* The phone shows the visitor's platform; the other picture is display: none (same attribute). Both stay
+            lazy: an eager one would be fetched even while hidden (up to 100 KB on a phone), and a lazy image on
+            screen is fetched at the first layout anyway. */}
         <div className="phone">
           <Shot
             className="ios"
@@ -55,6 +52,18 @@ export default function Hero({ android, ios }: { android: ReleaseInfo; ios: Rele
         </div>
       </div>
     </div>
+  )
+}
+
+function IosButton({ ios, at }: { ios: ReleaseInfo; at: 'first' | 'last' }) {
+  return (
+    <a className={`pbtn ios ${at}`} href="#install-ios">
+      <AppleIcon />
+      <span>
+        <b>Transi for iOS</b>
+        <small>{version(ios)}AltStore or IPA</small>
+      </span>
+    </a>
   )
 }
 
