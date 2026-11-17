@@ -1,22 +1,23 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import Script from 'next/script'
+import { Barlow, Barlow_Condensed } from 'next/font/google'
 import './globals.css'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const barlow = Barlow({
+  variable: '--font-barlow',
   subsets: ['latin'],
+  weight: ['400', '600', '700'],
 })
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const barlowCondensed = Barlow_Condensed({
+  variable: '--font-barlow-condensed',
   subsets: ['latin'],
+  weight: ['600', '700', '800'],
 })
 
 export const metadata: Metadata = {
   title: 'Transi',
   description:
-    'A native iOS & Android app for public transport in Bratislava. Real-time departures, a trip planner, and timetables for public transport in Bratislava.',
+    'A native iOS and Android app for Bratislava public transport: live departure boards, a trip planner that follows your trip step by step, full timetables and a map of every stop.',
   keywords: [
     'MHD Bratislava',
     'public transport',
@@ -30,16 +31,11 @@ export const metadata: Metadata = {
     'virtualna tabula',
   ],
   authors: [{ name: 'magic_sk' }],
-  icons: {
-    icon: [
-      { url: '/favicon.ico', media: '(prefers-color-scheme: light)' },
-      { url: '/favicon-dark.ico', media: '(prefers-color-scheme: dark)' },
-    ],
-  },
+  // icons: app/icon.svg (the flat mark) and app/favicon.ico (the same mark, for browsers without SVG icons)
   openGraph: {
     title: 'Transi',
     description:
-      'Real-time departures, a trip planner & timetables for MHD Bratislava.',
+      'Live departures, a trip planner that follows your trip, timetables and a map for MHD Bratislava.',
     type: 'website',
     images: [
       {
@@ -52,29 +48,31 @@ export const metadata: Metadata = {
   },
 }
 
+// Runs before first paint, so the page never renders one way and then jumps. It has to be a plain inline
+// <script> in <head>: next/script's beforeInteractive only runs once Next's own runtime has loaded, which
+// is after the first paint.
+//
+//   data-platform  which platform's button is filled and first, and which phone the hero shows
+//                  (the same rule as lib/useDevicePlatform.ts)
+//   .non-apple     custom scrollbar, skipped on Apple devices
+//   .intro         start states of the load animations; without script nothing is ever hidden
+//   .still         the background network holds still: Save-Data, a cellular or 2G/3G connection, or at most
+//                  4 CPU threads or 4 GB of memory (the connection and memory are only known in Chromium)
+const BEFORE_PAINT = `(function(d,n){var apple=/iPhone|iPad|iPod|Macintosh/i.test(n.userAgent),c=n.connection;d.dataset.platform=apple?'ios':'android';if(!apple)d.classList.add('non-apple');if(!matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('intro');if(c&&(c.saveData||c.type==='cellular'||/2g|3g/.test(c.effectiveType))||n.hardwareConcurrency<=4||n.deviceMemory<=4)d.classList.add('still')})(document.documentElement,navigator)`
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {/* Runs before paint - adds 'non-apple' class so custom scrollbar is skipped on Apple devices */}
-        <Script
-          id="non-apple-scrollbar"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `if(!/iPhone|iPad|iPod|Macintosh/i.test(navigator.userAgent))document.documentElement.classList.add('non-apple')`,
-          }}
-        />
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[999] focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-medium focus:text-white focus:shadow-lg"
-          style={{ background: '#f13953' }}
-        >
+    // suppressHydrationWarning: the script above adds an attribute and classes to <html> before React hydrates
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: BEFORE_PAINT }} />
+      </head>
+      <body className={`${barlow.variable} ${barlowCondensed.variable}`}>
+        <a href="#main-content" className="skip">
           Skip to main content
         </a>
         {children}

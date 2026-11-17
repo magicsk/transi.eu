@@ -4,13 +4,6 @@ export interface ReleaseInfo {
   assetName: string
 }
 
-export interface ScreenshotEntry {
-  label: string
-  description: string
-  dark: string
-  light: string
-}
-
 export async function fetchLatestRelease(
   repo: string,
   ext: string,

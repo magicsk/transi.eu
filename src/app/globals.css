@@ -1,305 +1,222 @@
-@import 'tailwindcss';
-
-/* ─────────────────────────────────────────────
-   Semantic design tokens - light mode (default)
-───────────────────────────────────────────── */
+/* Transi: a transit map in ink, with one red line. Light by default, dark from prefers-color-scheme.
+   Red is spent on the line only; glass only on the tram badge and secondary buttons. */
 :root {
-  --bg: #f3f6fa;
-  --bg-surface: #ffffff;
-  --phone-frame: #e2e5ee;
-
-  --text: #0d1117;
-  --text-secondary: rgba(13, 17, 23, 0.65);
-  --text-muted: rgba(13, 17, 23, 0.45);
-  --text-faint: rgba(13, 17, 23, 0.28);
-  --text-faintest: rgba(13, 17, 23, 0.15);
-
-  --border: rgba(0, 0, 0, 0.07);
-  --border-strong: rgba(0, 0, 0, 0.12);
-
-  --card-subtle: rgba(0, 0, 0, 0.025);
-  --card-bg: rgba(0, 0, 0, 0.04);
-  --card-hover: rgba(241, 57, 83, 0.06);
-
-  --glass-bg: rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(0, 0, 0, 0.07);
-  --glass-hover-bg: rgba(241, 57, 83, 0.05);
-
-  --scrollbar-bg: #f3f6fa;
-
-  --gradient-bg-1: #f7f4f5;
-  --gradient-bg-2: #fdf4f5;
-  --gradient-bg-3: #f7f5f7;
-
-  --indicator: rgba(0, 0, 0, 0.15);
+  --ground: #ffffff; --surface: #f1f2f4; --tint: #e6e8eb; --faint: #eceef0; --ink: #0e1012; --ink2: #50555c; --red: #f13953; --car: #d3d6da;
+  --btn: #0e1012; --btn-h: #2b2f34; --btn-on: #fff; --spine: 10px;
+  --glass: rgba(14, 16, 18, .06); --glass-edge: rgba(14, 16, 18, .22); --glass-top: rgba(255, 255, 255, .9);
 }
-
-/* ───────────────────────────────────────────
-   Dark mode overrides
-─────────────────────────────────────────── */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #09090f;
-    --bg-surface: #111118;
-    --phone-frame: #111118;
-
-    --text: #f0f0f5;
-    --text-secondary: rgba(240, 240, 245, 0.7);
-    --text-muted: rgba(240, 240, 245, 0.5);
-    --text-faint: rgba(240, 240, 245, 0.28);
-    --text-faintest: rgba(240, 240, 245, 0.15);
-
-    --border: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(255, 255, 255, 0.15);
-
-    --card-subtle: rgba(255, 255, 255, 0.025);
-    --card-bg: rgba(255, 255, 255, 0.04);
-    --card-hover: rgba(241, 57, 83, 0.08);
-
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-hover-bg: rgba(241, 57, 83, 0.06);
-
-    --scrollbar-bg: #09090f;
-
-    --gradient-bg-1: #09090f;
-    --gradient-bg-2: #150b0b;
-    --gradient-bg-3: #0d090f;
-
-    --indicator: rgba(255, 255, 255, 0.2);
+    --ground: #000000; --surface: #17181a; --tint: #2a2c30; --faint: #1c1d20; --ink: #ffffff; --ink2: #a8adb4; --car: #3a3d42;
+    --btn: #ffffff; --btn-h: #d9dbde; --btn-on: #000;
+    --glass: rgba(255, 255, 255, .09); --glass-edge: rgba(255, 255, 255, .2); --glass-top: rgba(255, 255, 255, .34);
   }
 }
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { scroll-behavior: smooth; }
+/* the two families come from next/font, which defines --font-* on <body> (layout.tsx) */
+body { position: relative; --display: var(--font-barlow-condensed), system-ui, sans-serif; --body: var(--font-barlow), system-ui, sans-serif;
+  background: var(--ground); color: var(--ink); font: 400 18px/1.5 var(--body); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; border-radius: 8px; }
+picture { display: block; }
+img { display: block; max-width: 100%; height: auto; }
+svg { flex: none; }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; position: relative; }
+.skip { position: fixed; left: 16px; top: 16px; z-index: 99; padding: 8px 16px; border-radius: 8px; background: var(--red); color: #fff; font-weight: 600; font-size: 15px; text-decoration: none; transform: translateY(-80px); }
+.skip:focus { transform: none; }
 
-/* ───────────────────────────────────────────
-   Tailwind theme extensions
-─────────────────────────────────────────── */
-@theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Custom scrollbar, non-Apple only (Safari uses its own overlay scrollbar) */
+html.non-apple::-webkit-scrollbar { width: 6px; }
+html.non-apple::-webkit-scrollbar-track { background: var(--ground); }
+html.non-apple::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
 
-  /* Brand: red theme #A91F13 → #F13953 */
-  --color-brand-50: #fff0f2;
-  --color-brand-100: #ffe0e5;
-  --color-brand-200: #ffc1cb;
-  --color-brand-300: #ff8e9d;
-  --color-brand-400: #f5617a;
-  --color-brand-500: #f13953;
-  --color-brand-600: #d42e45;
-  --color-brand-700: #a91f13;
-  --color-brand-800: #8a1910;
-  --color-brand-900: #5c100b;
-  --color-android: #3ddc84;
-  --color-ios: #f13953;
+/* nav: the route in miniature. One station per main stop, Install as the terminus. No bar, no rule, no glass.
+   Stations are the route's stops in small: ink ring, empty centre, nothing showing through. */
+.nav { display: flex; align-items: center; gap: 24px; padding: 18px 0 14px; position: relative; z-index: 5; }
+.brand { display: flex; align-items: center; gap: 10px; font: 800 30px/1 var(--display); text-decoration: none; }
+.brand .mark { width: 38px; height: 37px; fill: var(--red); transition: transform .25s cubic-bezier(.3, .7, .2, 1); transform-origin: 50% 100%; }
+.brand:hover .mark, .brand:focus-visible .mark { transform: translateY(-3px) scale(1.08); }
+.strip { display: flex; gap: 34px; margin-left: auto; position: relative; font-weight: 600; font-size: 16px; }
+/* --x0, --w and --p are set by Navbar.tsx: where the line starts, how long it is, how much of it is "travelled" */
+.track, .prog { position: absolute; left: var(--x0, 30px); width: var(--w, calc(100% - 60px)); background: var(--red); border-radius: 4px; }
+.track { top: 8px; height: 4px; }
+/* the stretch up to the hovered or current station thickens: a second bar, scaled in from the start */
+.prog { top: 6px; height: 8px; transform-origin: 0 50%; transform: scaleX(var(--p, 0)); transition: transform .35s cubic-bezier(.3, .7, .2, 1); }
+.strip a { position: relative; padding-top: 30px; text-decoration: none; text-align: center; color: var(--ink2); transition: color .2s; }
+.strip a::before { content: ''; position: absolute; top: 0; left: 50%; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%; background: var(--ground); border: 4.5px solid var(--ink); transition: transform .2s cubic-bezier(.3, .7, .2, 1); }
+.strip a::after { content: ''; position: absolute; top: 5px; left: 50%; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: var(--red); opacity: 0; transform: scale(.3); transition: opacity .2s var(--d, 0s), transform .2s var(--d, 0s); }
+.strip a:hover, .strip a:focus-visible, .strip a[aria-current] { color: var(--ink); }
+.strip a:hover::before, .strip a:focus-visible::before { transform: scale(1.25); }
+.strip a.on::after, .strip a:hover::after, .strip a:focus-visible::after { opacity: 1; transform: none; }
+.strip a:focus-visible { outline-offset: 6px; }
+.navfade { display: none; }
+.stop, #install, .term { scroll-margin-top: 16px; }
+@media (min-width: 901px) {
+  /* the strip stays with you; behind it the page colour fades out, so there is no bar and no edge */
+  .nav { position: sticky; top: 0; }
+  .navfade { display: block; position: fixed; inset: 0 0 auto 0; height: 136px; z-index: 4; pointer-events: none; background: linear-gradient(var(--ground) 56%, transparent); }
+  .stop, #install, .term { scroll-margin-top: 84px; }
 }
 
-/* ───────────────────────────────────────────
-   Base
-─────────────────────────────────────────── */
-html {
-  scroll-behavior: smooth;
-}
+/* hero */
+.net { position: absolute; inset: 0; overflow: hidden; z-index: 0; pointer-events: none; }
+.net svg { position: absolute; top: 0; left: 50%; transform: translateX(-50%); }
+.net path { fill: none; stroke: var(--faint); stroke-width: 12; stroke-linejoin: round; stroke-linecap: round; }
+.net circle { fill: var(--ground); stroke: var(--faint); stroke-width: 6; }
+.net .train { stroke: var(--car); animation: train linear infinite; } /* durations, dashes and the keyframes come with Network.tsx */
+.net .fill { fill: var(--car); stroke: none; opacity: 0; transform-box: fill-box; transform-origin: center; animation: lit linear infinite; }
+/* held still (one paused frame) on phones and touch devices, for reduced motion, and on slow or metered
+   connections and low-end machines (.still, from layout.tsx) */
+.still .net .train, .still .net .fill { animation-play-state: paused; }
+@media (max-width: 900px), (hover: none), (prefers-reduced-motion: reduce) { .net .train, .net .fill { animation-play-state: paused; } }
+main { position: relative; isolation: isolate; --sw: 440px; --dx: calc(var(--sw) + 23px); } /* --dx: middle lane minus left lane; a swing this tall is exactly 45 degrees */
+.hero { position: relative; padding: 36px 0 150px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 80px; align-items: end; }
+h1 { font: 800 clamp(76px, 13vw, 196px)/.8 var(--display); letter-spacing: -.015em; text-transform: uppercase; }
+h1 span { display: block; }
+.tag { font: 600 clamp(26px, 3vw, 42px)/1.05 var(--display); margin-top: 28px; }
+.lede { font-size: 20px; color: var(--ink2); max-width: 31em; margin-top: 18px; }
+.meta { margin-top: 18px; font-size: 16px; color: var(--ink2); }
+.phone { border-radius: 42px; overflow: hidden; background: var(--surface); box-shadow: 0 0 0 6px var(--ink); position: relative; z-index: 1; }
+.hero .phone { margin-bottom: -110px; } /* the line leaves from behind it, below the text */
+/* the hero phone shows the visitor's platform (data-platform is set before first paint, see layout.tsx) */
+.hero .phone .android, [data-platform=android] .hero .phone .ios { display: none; }
+[data-platform=android] .hero .phone .android { display: block; }
+[data-platform=android] .hero .phone { border-radius: 34px; }
 
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
-  overflow-x: hidden;
-  transition:
-    background 0.3s ease,
-    color 0.3s ease;
-}
+/* platform buttons: one component for both. The visitor's platform is filled and first; the other is glass. */
+.plats { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+/* glass, used sparingly: the tram badge and secondary buttons. Never the nav, never anything that carries the map. */
+.pbtn, .act { background: var(--glass); -webkit-backdrop-filter: blur(14px) saturate(1.5); backdrop-filter: blur(14px) saturate(1.5); box-shadow: inset 0 0 0 1px var(--glass-edge), inset 0 1px 0 var(--glass-top); }
+.pbtn { display: flex; align-items: center; gap: 14px; min-width: 262px; padding: 12px 24px 12px 18px; border-radius: 8px; text-decoration: none; }
+.pbtn b { display: block; font-weight: 700; font-size: 19px; line-height: 1.25; }
+.pbtn small { display: block; font-size: 14px; line-height: 1.3; opacity: .78; }
+.pbtn:hover, .act:hover { box-shadow: inset 0 0 0 2px var(--ink); }
+[data-platform=android] .pbtn.android, [data-platform=ios] .pbtn.ios { order: -1; background: var(--btn); color: var(--btn-on); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+[data-platform=android] .pbtn.android:hover, [data-platform=ios] .pbtn.ios:hover { background: var(--btn-h); box-shadow: none; }
 
-/* Keyboard focus ring */
-:focus-visible {
-  outline: 2px solid #f13953;
-  outline-offset: 2px;
-}
+/* the network: one path with round joins and caps, every bend the same radius (drawn by Route.tsx) */
+.line { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: -1; overflow: visible; pointer-events: none; }
+.line path { fill: none; stroke: var(--red); stroke-width: var(--spine); stroke-linejoin: round; stroke-linecap: round; }
+.line .ride { stroke: none; }
+/* tram: carried along the route by position: sticky boxes built in Route.tsx; nothing runs on scroll.
+   .rails only clips: browsers over-estimate the overflow of nested skewed boxes, which would add a sideways
+   scrollbar. It stays hidden until Route.tsx has placed the tram. */
+.rails { display: none; position: absolute; inset: 0 0 0 -40px; overflow: clip; z-index: 3; pointer-events: none; }
+.rail { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+.lv { position: absolute; left: 0; top: 0; width: 0; transform-origin: 0 0; }
+.pin { position: -webkit-sticky; position: sticky; top: 50vh; height: 0; }
+.upright { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+/* the marker is glass: the line and whatever it passes show through, blurred */
+.badge { position: absolute; left: -26px; top: -26px; width: 52px; height: 52px; border-radius: 15px; display: grid; place-items: center;
+  background: rgba(241, 57, 83, .58); -webkit-backdrop-filter: blur(9px) saturate(1.7); backdrop-filter: blur(9px) saturate(1.7);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .3), inset 0 1.5px 0 rgba(255, 255, 255, .6), 0 10px 22px -10px rgba(0, 0, 0, .7); }
+.badge .mk { width: 32px; height: 31px; fill: #fff; margin-top: 3px; }
 
-/* Reduced-motion: disable all decorative animations */
+/* route. Stops alternate between the middle lane (.even) and the left lane (.odd); --lx is the lane's x inside .txt */
+h2 { font: 800 clamp(48px, 6.4vw, 92px)/.88 var(--display); letter-spacing: -.01em; }
+.s-lede { font-size: 20px; color: var(--ink2); margin-top: 14px; max-width: 32em; }
+.head { margin-left: var(--sw); padding: 48px 0 12px 119px; }
+.head + .stop.even .shots { margin-top: -190px; } /* the first stop's phones sit beside the heading */
+.stop { position: relative; display: grid; align-items: start; padding-top: 44px; }
+.stop.odd { grid-template-columns: minmax(0, 1fr) var(--sw); gap: 56px; }
+.stop.even { grid-template-columns: var(--sw) minmax(0, 1fr); }
+.stop.even .shots { order: -1; }
+.txt { position: relative; --lx: 33px; padding-left: 96px; }
+.even .txt { --lx: 56px; padding-left: 119px; }
+.dot { position: absolute; z-index: 1; left: calc(var(--lx) - 22px); top: 13px; width: 44px; height: 44px; border-radius: 50%; background: var(--ground); border: 10px solid var(--ink); }
+/* a stop fills in once the tram has passed it (.passed, toggled by Route.tsx) */
+.dot::after { content: ''; position: absolute; inset: 2px; border-radius: 50%; background: var(--red); opacity: 0; transform: scale(.3); transition: opacity .25s, transform .25s; }
+.dot.passed::after { opacity: 1; transform: none; }
+.stop h3 { font: 800 clamp(40px, 5.4vw, 78px)/.9 var(--display); letter-spacing: -.01em; }
+.stop p { max-width: 25em; margin-top: 16px; color: var(--ink2); font-size: 20px; }
+.xc { display: flex; gap: 6px; margin-top: 14px; }
+.pf { font: 600 14px/1.5 var(--body); padding: 3px 9px; border-radius: 4px; white-space: nowrap; box-shadow: inset 0 0 0 2px var(--ink); }
+.swing { height: var(--dx); margin-top: 28px; }
+.even + .swing { margin-top: 8px; }
+.shots { display: flex; gap: 16px; align-items: flex-start; }
+.shots figure { width: 212px; }
+.shots .phone { border-radius: 30px; box-shadow: 0 0 0 4px var(--ink); }
+.shots figcaption { font-size: 14px; color: var(--ink2); text-align: center; margin-top: 10px; }
+.swing + .stop.odd .shots { margin-top: -200px; } /* phones tuck in beside the swing above */
+/* no screenshot yet */
+.minor { position: relative; margin-top: 30px; max-width: 30em; }
+.minor h3 { font: 700 30px/1.05 var(--display); letter-spacing: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.minor p { font-size: 18px; margin-top: 4px; }
+.end { position: relative; padding: 72px 0 0 96px; }
+
+/* terminals: one component for both platforms */
+.inst { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; margin-top: 200px; align-items: start; position: relative; }
+.term { position: relative; background: var(--ground); border-radius: 10px; box-shadow: inset 0 0 0 3px var(--ink); padding: 40px 28px 28px; }
+/* --st (set by Route.tsx) is where the station sits along the card's top edge: Android's is in the route's lane */
+.term::after { content: ''; position: absolute; left: calc(var(--st, 33px) - 22px); top: -22px; width: 44px; height: 44px; border-radius: 50%; background: var(--ground); border: 10px solid var(--ink); }
+.th { display: flex; align-items: center; gap: 16px; }
+.th img { width: 60px; height: 60px; border-radius: 14px; }
+.th h3 { font: 800 54px/.9 var(--display); }
+.th p { font-size: 16px; font-weight: 600; color: var(--ink2); margin-top: 4px; }
+.tp { color: var(--ink2); margin: 16px 0 20px; font-size: 17px; min-height: 3em; }
+.act { display: flex; align-items: center; gap: 14px; padding: 14px 20px; border-radius: 8px; text-decoration: none; margin-top: 10px; }
+button.act { width: 100%; border: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.act > span { flex: 1; min-width: 0; }
+.act b { display: block; font-weight: 700; font-size: 19px; line-height: 1.25; }
+.act small { display: block; font-size: 14px; opacity: .8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.act.main { background: var(--btn); color: var(--btn-on); box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.act.main:hover { background: var(--btn-h); box-shadow: none; }
+.act .src { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
+footer { margin-top: 88px; padding: 26px 0 40px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; color: var(--ink2); font-size: 15px; border-top: 2px solid var(--ink); }
+
+/* load animation, once: text rises, the phone slides up, the tram rolls in (the line draw is in Route.tsx).
+   Start states exist only under .intro, which a script adds before first paint: with scripts off nothing is hidden.
+   Keyframes only, and no CSS transition on any of these properties. */
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } }
+@keyframes phone { from { opacity: 0; transform: translateY(56px); } }
+@keyframes roll { from { opacity: 0; transform: translateX(var(--roll, 0px)); } 25% { opacity: 1; } }
+.intro .hero h1 span, .intro .hero .tag, .intro .hero .lede, .intro .hero .plats, .intro .hero .meta { animation: rise .55s cubic-bezier(.2, .7, .2, 1) both; }
+.intro .hero h1 span + span { animation-delay: .07s; }
+.intro .hero .tag { animation-delay: .15s; }
+.intro .hero .lede { animation-delay: .21s; }
+.intro .hero .plats { animation-delay: .27s; }
+.intro .hero .meta { animation-delay: .33s; }
+.intro .hero .phone { animation: phone .7s cubic-bezier(.2, .7, .2, 1) .12s both; }
+.intro .badge { animation: roll .75s cubic-bezier(.2, .7, .2, 1) .3s both; }
+.intro .strip a { animation: rise .45s cubic-bezier(.2, .7, .2, 1) calc(.05s + var(--i) * .06s) both; }
+
+/* phones: one lane down the left edge, everything stacked */
+@media (max-width: 900px) {
+  :root { --spine: 8px; }
+  body { font-size: 17px; }
+  .wrap { padding: 0 16px; }
+  .strip { display: none; }
+  .net { opacity: .7; }
+  .hero { padding: 20px 0 56px; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .pbtn { flex: 1 1 100%; }
+  .hero .phone { width: 250px; margin: 0 auto; }
+  .head { margin-left: 0; padding: 40px 0 0 40px; }
+  .stop, .stop.odd, .stop.even { display: block; padding-top: 34px; }
+  .txt, .even .txt { --lx: 10px; padding-left: 40px; }
+  .dot { left: calc(var(--lx) - 13px); top: 5px; width: 26px; height: 26px; border-width: 6px; }
+  .stop p { font-size: 17px; }
+  .swing { display: none; }
+  .shots, .swing + .stop.odd .shots, .head + .stop.even .shots { padding-left: 40px; margin-top: 22px; gap: 14px; }
+  .shots figure { width: auto; flex: 1; min-width: 0; }
+  .shots .phone { border-radius: 22px; box-shadow: 0 0 0 3px var(--ink); }
+  .end { padding: 56px 0 0 40px; }
+  /* the gap leaves room for the line to jog from the gutter into the iOS station */
+  .inst { grid-template-columns: minmax(0, 1fr); padding-left: 40px; gap: 124px; margin-top: 120px; }
+  .term { padding: 30px 18px 18px; }
+  .term::after { left: calc(var(--st, 32px) - 13px); top: -13px; width: 26px; height: 26px; border-width: 6px; }
+  .th h3 { font-size: 44px; }
+  .th img { width: 52px; height: 52px; }
+  .tp { min-height: 0; }
+  .badge { left: -20px; top: -20px; width: 40px; height: 40px; border-radius: 12px; }
+  .badge .mk { width: 25px; height: 24px; margin-top: 2px; }
+  footer { margin-top: 56px; }
+}
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  body {
-    transition: none;
-  }
-  .animated-gradient {
-    animation: none;
-    background-position: 0% 50%;
-  }
-  .pulse-ring::before {
-    animation: none;
-    opacity: 0.3;
-  }
-  .glass-card:hover {
-    transform: none;
-  }
-}
-
-/* Custom scrollbar - non-Apple only (Safari uses its own overlay scrollbar) */
-html.non-apple::-webkit-scrollbar {
-  width: 6px;
-}
-html.non-apple::-webkit-scrollbar-track {
-  background: var(--scrollbar-bg);
-}
-html.non-apple::-webkit-scrollbar-thumb {
-  background: #f13953;
-  border-radius: 3px;
-}
-
-/* ───────────────────────────────────────────
-   Glass utility classes
-─────────────────────────────────────────── */
-.glass {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(12px);
-}
-
-.glass-card {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(16px);
-  transition: all 0.3s ease;
-}
-
-.glass-card:hover {
-  background: var(--card-hover);
-  border-color: rgba(241, 57, 83, 0.25);
-  transform: translateY(-4px);
-}
-
-/* ───────────────────────────────────────────
-   Typography
-─────────────────────────────────────────── */
-.gradient-text {
-  background: linear-gradient(135deg, #a91f13 0%, #f13953 60%, #f5617a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ───────────────────────────────────────────
-   Glows
-─────────────────────────────────────────── */
-.glow-brand {
-  box-shadow:
-    0 0 30px rgba(241, 57, 83, 0.28),
-    0 0 60px rgba(241, 57, 83, 0.1);
-}
-.glow-brand-sm {
-  box-shadow: 0 0 15px rgba(241, 57, 83, 0.22);
-}
-
-/* No glow in light mode - looks out of place on white backgrounds */
-@media (prefers-color-scheme: light) {
-  .glow-brand {
-    box-shadow: none;
-  }
-  .glow-brand-sm {
-    box-shadow: none;
-  }
-}
-
-/* ───────────────────────────────────────────
-   Phone drop shadow
-─────────────────────────────────────────── */
-.phone-shadow {
-  filter: drop-shadow(0 30px 60px rgba(241, 57, 83, 0.12))
-    drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
-}
-
-@media (prefers-color-scheme: light) {
-  .phone-shadow {
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.12))
-      drop-shadow(0 4px 16px rgba(0, 0, 0, 0.08));
-  }
-}
-
-/* ───────────────────────────────────────────
-   Gradient border helper
-─────────────────────────────────────────── */
-.gradient-border {
-  position: relative;
-}
-.gradient-border::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  padding: 1px;
-  border-radius: inherit;
-  background: linear-gradient(
-    135deg,
-    rgba(241, 57, 83, 0.5),
-    rgba(245, 97, 122, 0.3),
-    transparent
-  );
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* ───────────────────────────────────────────
-   Noise texture overlay
-─────────────────────────────────────────── */
-.noise::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  border-radius: inherit;
-}
-
-/* ───────────────────────────────────────────
-   Animated hero gradient - adapts to theme
-─────────────────────────────────────────── */
-@keyframes gradientShift {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.animated-gradient {
-  will-change: background-position;
-  background: linear-gradient(
-    -45deg,
-    var(--gradient-bg-1),
-    var(--gradient-bg-2),
-    var(--gradient-bg-3),
-    var(--gradient-bg-1)
-  );
-  background-size: 400% 400%;
-  animation: gradientShift 12s ease infinite;
-}
-
-/* ───────────────────────────────────────────
-   Pulse ring (live badge)
-─────────────────────────────────────────── */
-@keyframes pulse-ring {
-  0% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  100% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
-}
-
-.pulse-ring::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  background: rgba(241, 57, 83, 0.3);
-  animation: pulse-ring 2s ease-out infinite;
+  html { scroll-behavior: auto; }
+  .dot::after { display: none; }
+  .prog, .strip a, .strip a::before, .strip a::after, .brand .mark { transition: none; }
 }
