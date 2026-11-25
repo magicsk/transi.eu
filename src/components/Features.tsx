@@ -20,7 +20,7 @@ const stops: Stop[] = [
   {
     id: 'departures',
     title: 'Departure board',
-    text: 'Live departures for any stop, with real-time delays and vehicle details. Save favourite stops and set a default. On Android the board also shows regional buses and service info.',
+    text: 'Live departures for any stop, with real-time delays and vehicle details. Save favorite stops and set a default. On Android the board also shows regional buses and service info.',
     shots: [
       { name: 'ios/virtual-table', caption: 'iOS' },
       { name: 'android/virtual-table', caption: 'Android' },
